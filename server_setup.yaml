@@ -8,6 +8,7 @@
   tasks:
     - name: Check server reachability
       ansible.builtin.ping:
+
     - name: Apt update
       ansible.builtin.apt:
         update_cache: true
