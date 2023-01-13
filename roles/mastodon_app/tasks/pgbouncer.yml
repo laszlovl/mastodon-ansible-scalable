@@ -1,0 +1,21 @@
+---
+- name: Install pgbouncer
+  ansible.builtin.apt:
+    name: pgbouncer
+    state: present
+
+- name: Create pgbouncer userlist
+  ansible.builtin.template:
+    src: pgbouncer/userlist.txt.j2
+    dest: /etc/pgbouncer/userlist.txt
+    owner: postgres
+    group: postgres
+  notify: Restart pgbouncer
+
+- name: Create pgbouncer ini
+  ansible.builtin.template:
+    src: pgbouncer/pgbouncer.ini.j2
+    dest: /etc/pgbouncer/pgbouncer.ini
+    owner: postgres
+    group: postgres
+  notify: Restart pgbouncer

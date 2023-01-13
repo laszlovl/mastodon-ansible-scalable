@@ -1,0 +1,5 @@
+---
+- name: Restart mastodon-sidekiq-ingress
+  ansible.builtin.service:
+    name: mastodon-sidekiq-ingress
+    state: restarted

@@ -1,0 +1,76 @@
+---
+- name: Allow http in firewall
+  ansible.builtin.include_role:
+    name: firewall
+    tasks_from: rule_allow
+  vars:
+    name: http
+    port: 80
+
+- name: Allow https in firewall
+  ansible.builtin.include_role:
+    name: firewall
+    tasks_from: rule_allow
+  vars:
+    name: https
+    port: 443
+
+- name: Notrack https in firewall
+  ansible.builtin.include_role:
+    name: firewall
+    tasks_from: rule_notrack
+  vars:
+    name: https
+    port: 443
+
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Create nginx systemd override directory
+  ansible.builtin.file:
+    path: /etc/systemd/system/nginx.service.d
+    state: directory
+
+- name: Add nginx systemd override
+  ansible.builtin.copy:
+    src: override.conf
+    dest: /etc/systemd/system/nginx.service.d/override.conf
+  notify:
+    - Reload systemd
+
+- name: Install letsencrypt
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - certbot
+    - python3-certbot-nginx
+
+- name: Nginx letsencrypt config
+  ansible.builtin.copy:
+    src: letsencrypt.conf
+    dest: /etc/nginx/letsencrypt.conf
+
+- name: Nginx dhparam
+  ansible.builtin.copy:
+    src: dhparam.pem
+    dest: /etc/nginx/dhparam.pem
+
+- name: Nginx config
+  ansible.builtin.copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  notify: Restart nginx
+
+- name: Add nginx default site
+  ansible.builtin.copy:
+    src: site-default
+    dest: /etc/nginx/sites-enabled/default
+  notify: Restart nginx
+
+- name: Flush handlers so nginx can process letsencrypt validation requests
+  ansible.builtin.meta: flush_handlers
+
+- ansible.builtin.import_tasks: mastodon.yml

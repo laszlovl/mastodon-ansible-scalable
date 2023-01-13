@@ -1,0 +1,22 @@
+---
+- name: Install redis-server
+  ansible.builtin.apt:
+    name: redis-server
+    state: present
+
+- name: Disable default redis service
+  ansible.builtin.service:
+    name: redis-server
+    enabled: true
+    state: stopped
+
+- name: Cleanup default redis config
+  ansible.builtin.file:
+    path: /etc/redis/redis.conf
+    state: absent
+
+- name: Create common redis config
+  ansible.builtin.copy:
+    src: redis-common.conf
+    dest: /etc/redis/redis-common.conf
+  notify: restart redis

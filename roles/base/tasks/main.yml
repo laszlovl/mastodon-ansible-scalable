@@ -1,0 +1,11 @@
+---
+- ansible.builtin.import_tasks: ssh.yml
+- ansible.builtin.import_tasks: account.yml
+- ansible.builtin.import_tasks: crap.yml
+- ansible.builtin.import_tasks: upgrades.yml
+
+# Temp/todo: pcextreme servers are configured to use dnssec, but it's broken..
+- name: Disable dnssec
+  ansible.builtin.file:
+    path: /etc/systemd/resolved.conf.d/10-dnssec.conf
+    state: absent

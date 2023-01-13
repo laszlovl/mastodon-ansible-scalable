@@ -1,0 +1,5 @@
+table inet filter {
+    chain input {
+       {{ "ip6 saddr {" ~ ', '.join(source) ~ "}" if source is defined }} {{ protocol | default('tcp') }} dport {{ port }} accept
+    }
+}

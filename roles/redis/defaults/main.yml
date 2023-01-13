@@ -1,0 +1,3 @@
+---
+redis_kv_memory: 2048m
+redis_cache_memory: 1024m

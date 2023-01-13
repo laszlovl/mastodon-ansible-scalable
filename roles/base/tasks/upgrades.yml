@@ -1,0 +1,10 @@
+---
+- name: Install unattended-upgrades
+  ansible.builtin.apt:
+    name: unattended-upgrades
+    state: present
+
+- name: Enable unattended upgrades
+  ansible.builtin.copy:
+    src: upgrades/unattended-upgrades
+    dest: /etc/apt/apt.conf.d/51periodic-unattended-upgrades

@@ -1,0 +1,5 @@
+---
+- name: Restart mastodon-sidekiq-default
+  ansible.builtin.service:
+    name: mastodon-sidekiq-default
+    state: restarted

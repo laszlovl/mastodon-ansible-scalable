@@ -1,0 +1,7 @@
+---
+base_ssh_port: 122
+
+redis_kv_port: 6370
+redis_cache_port: 6371
+
+wireguard_network: 10.0.0.0/8

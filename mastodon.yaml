@@ -1,0 +1,62 @@
+---
+- hosts: all
+  become: true
+  strategy: free
+  tasks:
+    - ansible.builtin.include_role:
+        name: common
+
+    - ansible.builtin.include_role:
+        name: firewall
+
+    - ansible.builtin.include_role:
+        name: base
+
+    - ansible.builtin.include_role:
+        name: wireguard
+
+    - ansible.builtin.include_role:
+        name: mail
+      when: "'mail' in group_names"
+
+    - ansible.builtin.include_role:
+        name: nginx
+      when: "'nginx' in group_names"
+
+    - ansible.builtin.include_role:
+        name: postgresql
+      when: "'postgresql' in group_names"
+
+    - ansible.builtin.include_role:
+        name: redis
+      when: "'redis' in group_names"
+
+    - ansible.builtin.include_role:
+        name: mastodon_web
+      when: "'mastodon_web' in group_names"
+
+    - ansible.builtin.include_role:
+        name: mastodon_streaming
+      when: "'mastodon_streaming' in group_names"
+
+    - ansible.builtin.include_role:
+        name: mastodon_sidekiq_combined
+      when: "'mastodon_sidekiq_auto' in group_names and ansible_processor_nproc < 4"
+
+    - ansible.builtin.include_role:
+        name: "{{ item }}"
+      loop:
+        - mastodon_sidekiq_default
+        - mastodon_sidekiq_ingress
+        - mastodon_sidekiq_push
+        - mastodon_sidekiq_pull
+        - mastodon_sidekiq_mailers
+      when: item in group_names or ('mastodon_sidekiq_auto' in group_names and ansible_processor_nproc >= 4)
+
+    - ansible.builtin.include_role:
+        name: mastodon_sidekiq_scheduler
+      when: "'mastodon_sidekiq_scheduler' in group_names"
+
+    - ansible.builtin.include_role:
+        name: mastodon_cron
+      when: "'mastodon_cron' in group_names"

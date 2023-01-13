@@ -1,0 +1,19 @@
+---
+- name: Create mastodon-sidekiq service {{ instance_name }}
+  ansible.builtin.template:
+    src: mastodon-sidekiq.service.j2
+    dest: /lib/systemd/system/mastodon-sidekiq-{{ instance_name }}.service
+  notify:
+    - Reload systemd
+    - Restart mastodon-sidekiq-{{ instance_name }}
+
+- name: Enable mastodon-sidekiq service {{ instance_name }}
+  ansible.builtin.service:
+    name: mastodon-sidekiq-{{ instance_name }}
+    enabled: true
+    state: started
+
+- name: Notify mastodon-sidekiq {{ instance_name }}
+  ansible.builtin.command: /bin/true
+  notify: Restart mastodon-sidekiq-{{ instance_name }}
+  changed_when: mastodon_app_envfile_result.changed

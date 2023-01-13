@@ -1,0 +1,55 @@
+[Unit]
+Description={{ instance_name }}
+After=network.target
+
+[Service]
+SyslogIdentifier=sidekiq-{{ instance_name }}
+Type=simple
+User=mastodon
+WorkingDirectory=/home/mastodon/live
+EnvironmentFile=/etc/mastodon/env
+Environment="RAILS_ENV=production"
+Environment="DB_POOL={{ concurrency }}"
+Environment="MALLOC_ARENA_MAX=2"
+Environment="LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2"
+ExecStart=bundle exec sidekiq -c {{ concurrency }} {{ queue }}
+TimeoutSec=15
+Restart=always
+# Proc filesystem
+ProcSubset=pid
+ProtectProc=invisible
+# Capabilities
+CapabilityBoundingSet=
+# Security
+NoNewPrivileges=true
+# Sandboxing
+ProtectSystem=strict
+PrivateTmp=true
+PrivateDevices=true
+PrivateUsers=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET
+RestrictAddressFamilies=AF_INET6
+RestrictAddressFamilies=AF_NETLINK
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RemoveIPC=true
+PrivateMounts=true
+ProtectClock=true
+# System Call Filtering
+SystemCallArchitectures=native
+SystemCallFilter=~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid
+SystemCallFilter=@chown
+SystemCallFilter=pipe
+SystemCallFilter=pipe2
+ReadWritePaths=/home/mastodon/live {% if mastodon_app_mount_src is defined %} /mnt/files {% endif %}
+
+[Install]
+WantedBy=multi-user.target

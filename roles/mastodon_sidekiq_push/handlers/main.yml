@@ -1,0 +1,5 @@
+---
+- name: Restart mastodon-sidekiq-push
+  ansible.builtin.service:
+    name: mastodon-sidekiq-push
+    state: restarted

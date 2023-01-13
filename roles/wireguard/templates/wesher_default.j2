@@ -1,0 +1,4 @@
+WESHER_CLUSTER_KEY={{ wireguard_key }}
+WESHER_JOIN={{ groups['all'] | map('extract', hostvars, 'ansible_host') | join(',') }}
+WESHER_BIND_ADDR={{ ansible_default_ipv6.address }}
+WESHER_OVERLAY_NET={{ wireguard_network }}

@@ -1,0 +1,8 @@
+---
+- ansible.builtin.include_role:
+    name: mastodon_sidekiq
+    tasks_from: instance.yml
+  vars:
+    instance_name: push
+    queue: -q push,10 -q default -q pull -q ingress -q mailers
+    concurrency: "{{ mastodon_sidekiq_push_concurrency }}"

@@ -1,0 +1,36 @@
+---
+- name: Remove qemu-guest-agent
+  ansible.builtin.apt:
+    name: qemu-guest-agent
+    state: absent
+  notify: Apt autoremove
+
+- name: Remove fwupd
+  ansible.builtin.apt:
+    name:
+      - fwupd
+      - fwupd-signed
+    state: absent
+  notify: Apt autoremove
+
+- name: Remove cloud-init
+  ansible.builtin.apt:
+    name:
+      - cloud-init
+      - cloud-initramfs-copymods
+      - cloud-initramfs-dyn-netconf
+      - cloud-guest-utils
+    state: absent
+  notify: Apt autoremove
+
+- name: Remove snapd
+  ansible.builtin.apt:
+    name: snapd
+    state: absent
+  notify: Apt autoremove
+
+- name: Remove ubuntu-release-upgrader-core
+  ansible.builtin.apt:
+    name: ubuntu-release-upgrader-core
+    state: absent
+  notify: Apt autoremove

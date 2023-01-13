@@ -1,0 +1,2 @@
+---
+mastodon_sidekiq_mailers_concurrency: 5

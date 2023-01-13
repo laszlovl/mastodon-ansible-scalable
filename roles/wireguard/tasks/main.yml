@@ -1,0 +1,63 @@
+---
+- name: Allow wireguard in firewall
+  ansible.builtin.include_role:
+    name: firewall
+    tasks_from: rule_allow
+  vars:
+    name: wireguard
+    port: 51820
+    protocol: udp
+    source: "{{ groups['all'] | map('extract', hostvars, 'ansible_host') }}"
+
+- name: Allow wesher tcp in firewall
+  ansible.builtin.include_role:
+    name: firewall
+    tasks_from: rule_allow
+  vars:
+    name: wesher_tcp
+    port: 7946
+    protocol: tcp
+    source: "{{ groups['all'] | map('extract', hostvars, 'ansible_host') }}"
+
+- name: Allow wesher udp in firewall
+  ansible.builtin.include_role:
+    name: firewall
+    tasks_from: rule_allow
+  vars:
+    name: wesher_udp
+    port: 7946
+    protocol: udp
+    source: "{{ groups['all'] | map('extract', hostvars, 'ansible_host') }}"
+
+- name: Download wesher
+  ansible.builtin.get_url:
+    url: https://github.com/costela/wesher/releases/download/v0.2.6/wesher-amd64
+    checksum: sha256:8c551ca211d7809246444765b5552a8d1742420c64eff5677d1e27a34c72aeef
+    dest: /usr/sbin/wesher
+    mode: "0775"
+
+- name: Create wesher config
+  ansible.builtin.template:
+    src: wesher_default.j2
+    dest: /etc/default/wesher
+  notify: Restart wesher
+
+- name: Create wesher service
+  ansible.builtin.copy:
+    src: wesher.service
+    dest: /lib/systemd/system/wesher.service
+  notify:
+    - Reload systemd
+
+- name: Enable wesher service
+  ansible.builtin.service:
+    name: wesher
+    enabled: true
+    state: started
+
+- name: Configure sysctl to allow services to bind to the wireguard IP before it's initialized
+  ansible.builtin.copy:
+    dest: /etc/sysctl.d/99-nonlocal-bind.conf
+    content: net.ipv4.ip_nonlocal_bind=1
+  notify:
+    - Reload sysctl

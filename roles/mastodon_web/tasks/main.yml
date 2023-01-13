@@ -1,0 +1,20 @@
+---
+- name: Create mastodon-web service
+  ansible.builtin.template:
+    src: mastodon-web.service.j2
+    dest: /lib/systemd/system/mastodon-web.service
+  notify:
+    - Reload systemd
+    - Restart mastodon-web
+
+- name: Enable mastodon-web service
+  ansible.builtin.service:
+    name: mastodon-web
+    enabled: true
+    state: started
+
+# No, do NOT attempt to directly notify the handler from the mastodon_app dependency role. HERE BE ANSIBLE DRAGONS!
+- name: Notify mastodon-web handler via mastodon-app
+  ansible.builtin.command: /bin/true
+  notify: Restart mastodon-web
+  changed_when: mastodon_app_envfile_result.changed

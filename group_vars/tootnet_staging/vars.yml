@@ -1,0 +1,12 @@
+---
+mastodon_app_domain: staging.tootnet.nl
+
+mastodon_app_s3_bucket: staging_tootnet_nl
+mastodon_app_s3_hostname: o.auroraobjects.eu
+mastodon_app_s3_signature_version: s3
+
+#mastodon_app_mount_src: u326276@u326276.your-storagebox.de:/
+#mastodon_app_mount_key: "{{ vault_mastodon_app_mount_key }}"
+
+redis_kv_memory: 512m
+redis_cache_memory: 256m

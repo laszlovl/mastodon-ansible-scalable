@@ -1,0 +1,8 @@
+---
+- name: Restart wesher
+  ansible.builtin.service:
+    name: wesher
+    state: restarted
+
+- name: Reload sysctl
+  ansible.builtin.command: sysctl --system

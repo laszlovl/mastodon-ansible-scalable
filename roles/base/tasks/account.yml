@@ -1,0 +1,24 @@
+---
+- name: Create user account
+  ansible.builtin.user:
+    name: "{{ base_account_username }}"
+    state: present
+    shell: /bin/bash
+    groups: sudo
+    append: true
+
+- name: Create ssh key for user account
+  ansible.posix.authorized_key:
+    user: "{{ base_account_username }}"
+    state: present
+    key: ssh-rsa {{ base_account_sshkey }}
+
+- name: Ensure sudo works without a password
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/nopasswd
+    content: "%sudo ALL=(ALL:ALL) NOPASSWD: ALL"
+
+- name: Ensure ssh agent works within sudo
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/env_keep
+    content: Defaults env_keep+=SSH_AUTH_SOCK

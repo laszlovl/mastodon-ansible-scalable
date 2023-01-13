@@ -1,0 +1,5 @@
+table inet filter {
+    chain prerouting {
+       {{ protocol | default('tcp') }} dport {{ port }} notrack
+    }
+}

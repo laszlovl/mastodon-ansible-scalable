@@ -1,0 +1,13 @@
+[Unit]
+Description=wesher
+After=network-online.target
+
+[Service]
+EnvironmentFile=/etc/default/wesher
+ExecStart=/sbin/wesher
+Restart=on-failure
+RestartSec=10
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

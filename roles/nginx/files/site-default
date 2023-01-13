@@ -1,0 +1,13 @@
+# default server for requests with no/unknown vhost
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    
+    include letsencrypt.conf;
+    
+    log_not_found off;
+    
+    location / {
+        return 404;
+    }
+}

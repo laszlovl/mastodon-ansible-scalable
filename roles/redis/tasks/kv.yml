@@ -1,0 +1,8 @@
+---
+- ansible.builtin.include_tasks:
+    file: instance.yml
+  vars:
+    name: kv
+    port: "{{ redis_kv_port }}"
+    memory: "{{ redis_kv_memory }}"
+    persistence: true

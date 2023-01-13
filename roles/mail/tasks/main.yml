@@ -1,0 +1,26 @@
+---
+- name: Allow smtp in firewall
+  ansible.builtin.include_role:
+    name: firewall
+    tasks_from: rule_allow
+  vars:
+    name: smtp
+    port: 25
+
+- name: Install exim4
+  ansible.builtin.apt:
+    name: exim4
+    state: present
+
+- name: Set system mailname
+  ansible.builtin.copy:
+    dest: /etc/mailname
+    content: "{{ mastodon_app_domain }}"
+
+- name: Write exim4 config
+  ansible.builtin.template:
+    src: update-exim4.conf.conf.j2
+    dest: /etc/exim4/update-exim4.conf.conf
+  notify:
+    - Run update-exim4.conf
+    - Restart exim4

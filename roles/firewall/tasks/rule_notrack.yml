@@ -1,0 +1,7 @@
+---
+- name: Create notrack rule
+  ansible.builtin.template:
+    src: notrack.conf.j2
+    dest: /etc/nftables/conf.d/notrack_{{ name }}.conf
+    validate: nft -t -f %s
+  notify: Restart nftables

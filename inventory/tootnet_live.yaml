@@ -1,0 +1,41 @@
+---
+tootnet_live:
+  # list all hosts in your cluster here. currently these must be ipv6 addresses
+  hosts:
+    tnlive1:
+      ansible_host: 2a05:1500:702:5:1c00:bff:fe00:26fc
+    tnlive2:
+      ansible_host: 2a05:1500:702:5:1c00:1eff:fe00:26fd
+  # define which roles should run on which hosts(s) here
+  children:
+    # mailserver: only has to be ran on a single host; won't use much resources
+    mail:
+      hosts: tnlive1
+    # crons: must only run on a single host; won't use much resources
+    mastodon_cron:
+      hosts: tnlive1
+    # default sidekiq processes: can be ran on multiple hosts; will use a lot of CPU and RAM
+    mastodon_sidekiq_auto:
+      hosts:
+        tnlive2:
+    # scheduler sidekiq process: must only run on a single host; will use some RAM
+    mastodon_sidekiq_scheduler:
+      hosts: tnlive1
+    # mastodon streaming API: can be ran on multiple hosts; will use some CPU and RAM
+    mastodon_streaming:
+      hosts:
+        tnlive2:
+    # mastodon web: can be ran on multiple hosts; will use a lot of CPU and RAM
+    mastodon_web:
+      hosts:
+        tnlive2:
+    # nginx: only has to be ran on a single host; won't use much resources
+    nginx:
+      hosts:
+        tnlive1:
+    # postgresql: must only run on a single host; will use a lot of CPU and RAM
+    postgresql:
+      hosts: tnlive1
+    # redis: must only run on a single host; will use a lot of RAM
+    redis:
+      hosts: tnlive1

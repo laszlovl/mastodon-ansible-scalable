@@ -1,0 +1,10 @@
+---
+# TODO: clean up unmanaged files?
+# TODO: warn on duplicate filenames?
+
+- name: Create allow rule
+  ansible.builtin.template:
+    src: allow.conf.j2
+    dest: /etc/nftables/conf.d/allow_{{ name }}.conf
+    validate: nft -t -f %s
+  notify: Restart nftables

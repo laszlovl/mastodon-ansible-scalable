@@ -1,0 +1,5 @@
+---
+- name: Restart mastodon-streaming
+  ansible.builtin.service:
+    name: mastodon-streaming
+    state: restarted

@@ -1,0 +1,9 @@
+---
+mastodon_app_domain: tootnet.nl
+
+mastodon_app_s3_bucket: live_tootnet_nl
+mastodon_app_s3_hostname: o.auroraobjects.eu
+mastodon_app_s3_signature_version: s3
+
+redis_kv_memory: 512m
+redis_cache_memory: 256m

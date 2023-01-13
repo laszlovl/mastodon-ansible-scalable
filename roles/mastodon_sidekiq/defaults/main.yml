@@ -1,0 +1,10 @@
+---
+mastodon_sidekiq_concurrency: 10
+
+mastodon_sidekiq_combined_concurrency: "{{ mastodon_sidekiq_concurrency }}"
+mastodon_sidekiq_default_concurrency: "{{ mastodon_sidekiq_concurrency }}"
+mastodon_sidekiq_ingress_concurrency: "{{ mastodon_sidekiq_concurrency }}"
+mastodon_sidekiq_mailers_concurrency: "{{ mastodon_sidekiq_concurrency }}"
+mastodon_sidekiq_pull_concurrency: "{{ mastodon_sidekiq_concurrency }}"
+mastodon_sidekiq_push_concurrency: "{{ mastodon_sidekiq_concurrency }}"
+mastodon_sidekiq_scheduler_concurrency: 5

@@ -1,0 +1,16 @@
+---
+- name: Restart redis kv
+  ansible.builtin.service:
+    name: redis-server@kv
+    state: restarted
+  listen:
+    - restart redis
+    - restart redis kv
+
+- name: Restart redis cache
+  ansible.builtin.service:
+    name: redis-server@cache
+    state: restarted
+  listen:
+    - restart redis
+    - restart redis cache

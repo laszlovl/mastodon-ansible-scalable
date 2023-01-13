@@ -1,0 +1,10 @@
+---
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+# putting this in the firewall role makes it execute multiple times at the end of the run
+- name: Restart nftables
+  ansible.builtin.service:
+    name: nftables
+    state: restarted

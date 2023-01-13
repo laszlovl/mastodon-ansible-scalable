@@ -1,0 +1,44 @@
+---
+- hosts: all
+  become: true
+  strategy: free
+  vars:
+    ansible_user: root
+    ansible_port: 22
+  tasks:
+    - name: Check server reachability
+      ansible.builtin.ping:
+    - name: Apt update
+      ansible.builtin.apt:
+        update_cache: true
+
+    - ansible.builtin.include_role:
+        name: common
+
+    - ansible.builtin.include_role:
+        name: firewall
+
+    - ansible.builtin.include_role:
+        name: wireguard
+
+    - ansible.builtin.include_role:
+        name: base
+
+    - name: Apply SSH and firewall restarts
+      meta: flush_handlers
+
+    - name: Update SSH connection properties
+      set_fact:
+        ansible_user: "{{ base_account_username }}"
+        ansible_port: "{{ base_ssh_port }}"
+
+    - name: Apt upgrade
+      ansible.builtin.apt:
+        upgrade: full
+
+    - name: Apt autoremove
+      ansible.builtin.apt:
+        autoremove: true
+
+    - name: Reboot
+      ansible.builtin.reboot:

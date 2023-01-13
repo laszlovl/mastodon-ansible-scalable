@@ -1,0 +1,8 @@
+---
+- ansible.builtin.include_tasks:
+    file: instance.yml
+  vars:
+    name: cache
+    port: "{{ redis_cache_port }}"
+    memory: "{{ redis_cache_memory }}"
+    persistence: false

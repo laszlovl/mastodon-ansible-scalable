@@ -1,0 +1,12 @@
+---
+- name: Create redis config  {{ name }}
+  ansible.builtin.template:
+    src: redis.conf.j2
+    dest: /etc/redis/redis-{{ name }}.conf
+  notify: restart redis {{ name }}
+
+- name: Enable redis service {{ name }}
+  ansible.builtin.service:
+    name: redis-server@{{ name }}
+    state: started
+    enabled: true

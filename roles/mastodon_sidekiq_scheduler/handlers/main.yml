@@ -1,0 +1,5 @@
+---
+- name: Restart mastodon-sidekiq-scheduler
+  ansible.builtin.service:
+    name: mastodon-sidekiq-scheduler
+    state: restarted

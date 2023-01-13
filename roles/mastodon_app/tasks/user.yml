@@ -1,0 +1,13 @@
+---
+- name: Create mastodon group
+  ansible.builtin.group:
+    name: mastodon
+    state: present
+    gid: 2000
+
+- name: Create mastodon user
+  ansible.builtin.user:
+    name: mastodon
+    state: present
+    group: mastodon
+    uid: 2000

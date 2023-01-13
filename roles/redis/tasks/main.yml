@@ -1,0 +1,4 @@
+---
+- ansible.builtin.include_tasks: common.yml
+- ansible.builtin.include_tasks: kv.yml
+- ansible.builtin.include_tasks: cache.yml

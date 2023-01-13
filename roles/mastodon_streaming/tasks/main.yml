@@ -1,0 +1,19 @@
+---
+- name: Create mastodon-streaming service
+  ansible.builtin.template:
+    src: mastodon-streaming.service.j2
+    dest: /lib/systemd/system/mastodon-streaming.service
+  notify:
+    - Reload systemd
+    - Restart mastodon-streaming
+
+- name: Enable mastodon-streaming service
+  ansible.builtin.service:
+    name: mastodon-streaming
+    enabled: true
+    state: started
+
+- name: Notify mastodon-streaming handler via mastodon-app
+  ansible.builtin.command: /bin/true
+  notify: Restart mastodon-streaming
+  changed_when: mastodon_app_envfile_result.changed

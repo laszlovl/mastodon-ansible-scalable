@@ -1,0 +1,23 @@
+---
+# imports from the ansible vault
+base_account_username: "{{ vault_base_account_username }}"
+base_account_sshkey: "{{ vault_base_account_sshkey }}"
+
+mastodon_app_s3_key: "{{ vault_mastodon_app_s3_key }}"
+mastodon_app_s3_secret_key: "{{ vault_mastodon_app_s3_secret_key }}"
+
+mastodon_app_secret_key_base: "{{ vault_mastodon_app_secret_key_base }}"
+mastodon_app_otp_secret: "{{ vault_mastodon_app_otp_secret }}"
+mastodon_app_vapid_private_key: "{{ vault_mastodon_app_vapid_private_key }}"
+mastodon_app_vapid_public_key: "{{ vault_mastodon_app_vapid_public_key }}"
+
+postgres_password: "{{ vault_postgres_password }}"
+
+wireguard_key: "{{ vault_wireguard_key }}"
+
+# ansible meta configuration
+ansible_user: "{{ base_account_username }}"
+ansible_port: "{{ base_ssh_port }}"
+
+# TODO.... bootstrap of wesher on the first node
+wireguard_ip: "{{ ansible_wgoverlay.ipv4.address | default('127.0.2.1') }}"

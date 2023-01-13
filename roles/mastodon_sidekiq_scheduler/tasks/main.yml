@@ -1,0 +1,8 @@
+---
+- ansible.builtin.include_role:
+    name: mastodon_sidekiq
+    tasks_from: instance.yml
+  vars:
+    instance_name: scheduler
+    queue: -q scheduler
+    concurrency: "{{ mastodon_sidekiq_scheduler_concurrency }}"

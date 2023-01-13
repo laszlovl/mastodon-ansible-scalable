@@ -1,0 +1,33 @@
+---
+tootnet_staging:
+  hosts:
+    tnstaging1:
+      ansible_host: 2a05:1500:702:5:1c00:77ff:fe00:2701
+    tnstaging2:
+      ansible_host: 2a05:1500:702:5:1c00:13ff:fe00:2702
+  children:
+    mail:
+      hosts: tnstaging1
+    mastodon_cron:
+      hosts: tnstaging1
+    mastodon_sidekiq_auto:
+      hosts:
+        tnstaging1:
+        tnstaging2:
+    mastodon_sidekiq_scheduler:
+      hosts: tnstaging1
+    mastodon_streaming:
+      hosts:
+        tnstaging1:
+        tnstaging2:
+    mastodon_web:
+      hosts:
+        tnstaging1:
+        tnstaging2:
+    nginx:
+      hosts:
+        tnstaging1:
+    postgresql:
+      hosts: tnstaging1
+    redis:
+      hosts: tnstaging1

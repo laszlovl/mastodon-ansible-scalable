@@ -1,0 +1,2 @@
+---
+mastodon_sidekiq_pull_concurrency: 10

@@ -1,0 +1,20 @@
+---
+- ansible.builtin.include_tasks:
+    file: letsencrypt.yml
+  vars:
+    domains:
+      - "{{ mastodon_app_domain }}"
+      - files.{{ mastodon_app_domain }}
+      - assets.{{ mastodon_app_domain }}
+
+- ansible.builtin.template:
+    src: site-mastodon.j2
+    dest: /etc/nginx/sites-enabled/mastodon
+  notify: Restart nginx
+
+- name: Add nginx user to mastodon group
+  ansible.builtin.user:
+    name: www-data
+    state: present
+    groups: mastodon
+    append: true

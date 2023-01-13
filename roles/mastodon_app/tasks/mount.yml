@@ -1,0 +1,33 @@
+---
+- name: Install sshfs
+  ansible.builtin.apt:
+    name: sshfs
+    state: present
+
+- name: Create mount directory
+  ansible.builtin.file:
+    path: /mnt/files
+    state: directory
+    owner: mastodon
+    group: mastodon
+
+- name: Create mount private key
+  ansible.builtin.copy:
+    content: "{{ mastodon_app_mount_key }}"
+    dest: /etc/mastodon/mount.key
+    mode: "0600"
+
+- name: Mount the sshfs
+  ansible.posix.mount:
+    src: "{{ mastodon_app_mount_src }}"
+    path: /mnt/files
+    opts: idmap=user,reconnect,ServerAliveInterval=15,IdentityFile=/etc/mastodon/mount.key,StrictHostKeyChecking=accept-new,allow_other,auto_cache,dir_cache=yes,uid=2000,gid=2000
+    fstype: sshfs
+    state: mounted
+
+- name: Create mount subdirectory
+  ansible.builtin.file:
+    path: /mnt/files/{{ mastodon_app_domain }}
+    state: directory
+    owner: mastodon
+    group: mastodon

@@ -1,0 +1,18 @@
+---
+- name: Mastodon media_remove cron
+  ansible.builtin.cron:
+    name: media_remove
+    user: mastodon
+    hour: "5"
+    minute: "30"
+    weekday: "1"
+    job: RAILS_ENV=production /home/mastodon/live/bin/tootctl media remove
+
+- name: Mastodon preview_cards_remove cron
+  ansible.builtin.cron:
+    name: preview_cards_remove
+    user: mastodon
+    hour: "5"
+    minute: "35"
+    weekday: "1"
+    job: RAILS_ENV=production /home/mastodon/live/bin/tootctl preview_cards remove

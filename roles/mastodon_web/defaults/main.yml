@@ -1,0 +1,4 @@
+---
+# don't run puma in cluster mode at all ("0") if we only have a single core
+mastodon_web_processes: "{{ ansible_processor_nproc if (ansible_processor_nproc > 1) else 0 }}"
+mastodon_web_threads: 10

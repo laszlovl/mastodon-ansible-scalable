@@ -1,0 +1,5 @@
+---
+- name: Request letsencrypt certificate
+  ansible.builtin.command: certbot certonly --nginx --non-interactive --agree-tos -m letsencrypt@{{ mastodon_app_domain }} -d {{ domains | join(' -d ') }}
+  args:
+    creates: /etc/letsencrypt/live/{{ domains[0] }}/fullchain.pem

@@ -1,0 +1,5 @@
+---
+- name: Restart mastodon-web
+  ansible.builtin.service:
+    name: mastodon-web
+    state: restarted
