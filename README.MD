@@ -30,7 +30,8 @@ Given a `mastodon_app_domain` of "mastodon.eu", point A/AAAA records to the ngin
 * `files.mastodon.eu`
 * `assets.mastodon.eu`
 
-For mail delivery, set the reverse DNS for the server handling mail to `mastodon.eu` and create an SPF record  like `v=spf1 a:mailserver.mastodon.eu ~all`.
+For mail delivery, given the `mail` role running on a server with hostname "server1" and DNS record "server1.mastodon.eu",
+set the reverse DNS for server1 to `mastodon.eu` and create an SPF record  like `v=spf1 a:server1.mastodon.eu ~all`.
 
 # Initialize
 

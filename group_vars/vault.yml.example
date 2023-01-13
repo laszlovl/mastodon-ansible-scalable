@@ -12,7 +12,7 @@ vault_mastodon_app_s3_secret_key: xxx
 vault_mastodon_app_secret_key_base: xxx
 # a random string, generate it with `openssl rand -hex 64`
 vault_mastodon_app_otp_secret: xxx
-# a VAPID keypair, generate with `RAILS_ENV=production rake mastodon:webpush:generate_vapid_key`
+# a VAPID keypair, generate with `RAILS_ENV=production rake mastodon:webpush:generate_vapid_key` or search the web for "vapid key generator"
 vault_mastodon_app_vapid_private_key: xxx
 vault_mastodon_app_vapid_public_key: xxx
 
