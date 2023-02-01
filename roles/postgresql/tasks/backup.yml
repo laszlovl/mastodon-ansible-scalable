@@ -1,0 +1,28 @@
+- name: Initialize restic repository
+  ansible.builtin.command: "restic -r s3:https://{{ mastodon_app_s3_hostname }}/{{ restic_s3_bucket }} init"
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ mastodon_app_s3_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ mastodon_app_s3_secret_key }}"
+    RESTIC_PASSWORD: "{{ restic_password }}"
+  when: restic_snapshots.rc != 0
+
+- name: Create postgres backup directory
+  ansible.builtin.file:
+    path: "/var/lib/postgresql/backup"
+    state: directory
+    owner: postgres
+    group: postgres
+
+- name: Create cron for postgres database dump
+  ansible.builtin.cron:
+    name: postgres_backup_dump
+    user: postgres
+    minute: "15"
+    job: "pg_dump mastodon > /var/lib/postgresql/backup/mastodon.sql"
+
+- name: Create cron for postgres database backup via restic
+  ansible.builtin.cron:
+    name: postgres_backup_restic
+    user: root
+    minute: "50"
+    job: "ionice -c2 nice -n19 restic -r s3:https://{{ restic_s3_hostname }}/{{ restic_s3_bucket }} backup /var/lib/postgresql/backup"

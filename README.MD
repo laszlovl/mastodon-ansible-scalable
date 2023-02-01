@@ -42,6 +42,5 @@ To create an admin user: `RAILS_ENV=production bin/tootctl accounts create masto
 # TODO
 
 * build mastodon as deb
-* backups
 * monitoring
 * dkim

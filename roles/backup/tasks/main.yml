@@ -1,0 +1,52 @@
+- name: Install restic
+  ansible.builtin.apt:
+    name: restic
+    state: present
+
+- name: Check if restic repository exists
+  ansible.builtin.command: "restic -r s3:https://{{ restic_s3_hostname }}/{{ restic_s3_bucket }} snapshots"
+  ignore_errors: true
+  changed_when: false
+  no_log: true
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ restic_s3_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ restic_s3_secret_key }}"
+    RESTIC_PASSWORD: "{{ restic_password }}"
+  register: restic_snapshots
+
+- name: Initialize restic repository
+  ansible.builtin.command: "restic -r s3:https://{{ restic_s3_hostname }}/{{ restic_s3_bucket }} init"
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ restic_s3_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ restic_s3_secret_key }}"
+    RESTIC_PASSWORD: "{{ restic_password }}"
+  when: restic_snapshots.rc != 0
+
+- name: Create AWS_ACCESS_KEY_ID env variable for restic cron
+  ansible.builtin.cron:
+    name: AWS_ACCESS_KEY_ID
+    env: yes
+    job: "{{ restic_s3_key }}"
+    user: root
+
+- name: Create AWS_SECRET_ACCESS_KEY env variable for restic cron
+  ansible.builtin.cron:
+    name: AWS_SECRET_ACCESS_KEY
+    env: yes
+    job: "{{ restic_s3_secret_key }}"
+    user: root
+
+- name: Create AWS_ACCESS_KEY_ID env variable for restic cron
+  ansible.builtin.cron:
+    name: RESTIC_PASSWORD
+    env: yes
+    job: "{{ restic_password }}"
+    user: root
+
+- name: Create cron for restic forget
+  ansible.builtin.cron:
+    name: restic_forget
+    user: root
+    hour: "4"
+    minute: "30"
+    job: "restic -r s3:https://{{ restic_s3_hostname }}/{{ restic_s3_bucket }} forget --keep-hourly 24 --keep-daily 7 --keep-weekly 5 --keep-monthly 1"

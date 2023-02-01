@@ -3,9 +3,9 @@ vault_base_account_username: xxx
 # the public SSH key you will use to login (without the ssh-rsa part)
 vault_base_account_sshkey: xxx
 
-# the API key from your object storage provider
+# the API key from your object storage provider for user uploads
 vault_mastodon_app_s3_key: xxx
-# the secret key from your object storage provider
+# the secret key from your object storage provider for user uploads
 vault_mastodon_app_s3_secret_key: xxx
 
 # a random string, generate it with `openssl rand -hex 64`
@@ -18,6 +18,13 @@ vault_mastodon_app_vapid_public_key: xxx
 
 # a random string, generate it any way you like (e.g. `openssl rand -hex 32`)
 vault_postgres_password: xxx
+
+# a random string, generate it any way you like (e.g. `openssl rand -hex 32`)
+vault_restic_password: xxx
+# the API key from your object storage provider for backups. if left out, vault_mastodon_app_s3_key will be reused
+vault_restic_s3_key: xxx
+# the secret key from your object storage provider for backups. if left out, vault_mastodon_app_s3_secret_key will be reused
+vault_restic_s3_secret_key: xxx
 
 # a random string, generate it with `head -c 32 /dev/random | base64`
 vault_wireguard_key: xxx

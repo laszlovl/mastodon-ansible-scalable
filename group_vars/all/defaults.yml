@@ -4,4 +4,7 @@ base_ssh_port: 122
 redis_kv_port: 6370
 redis_cache_port: 6371
 
+# NB: it's a good practice to store backups with an offsite provider. e.g. if you use Amazon EC2 for servers, consider using a competitor's s3-compatible service instead of Amazon S3
+restic_s3_hostname: "{{ mastodon_app_s3_hostname }}"
+
 wireguard_network: 10.0.0.0/8

@@ -13,6 +13,10 @@ mastodon_app_vapid_public_key: "{{ vault_mastodon_app_vapid_public_key }}"
 
 postgres_password: "{{ vault_postgres_password }}"
 
+restic_password: "{{ vault_restic_password }}"
+restic_s3_key: "{{ vault_restic_s3_key | default(vault_mastodon_app_s3_key) }}"
+restic_s3_secret_key: "{{ vault_restic_s3_secret_key | default(vault_mastodon_app_s3_secret_key) }}"
+
 wireguard_key: "{{ vault_wireguard_key }}"
 
 # ansible meta configuration

@@ -1,9 +1,18 @@
 ---
+# the "naked" domain name for your mastodon instance
 mastodon_app_domain: tootnet.nl
 
+# the name of the s3 bucket where user-uploads are stored. depending on your s3 provider, you might need to manually create this bucket
 mastodon_app_s3_bucket: live_tootnet_nl
+# the hostname of your s3 provider
 mastodon_app_s3_hostname: o.auroraobjects.eu
+# in case of a s3-compatible provider, you might need to specify an older signature version
 mastodon_app_s3_signature_version: s3
 
+# the maximum amount of memory the regular redis instance is allowed to use
 redis_kv_memory: 512m
+# the maximum amount of memory the cache redis instance is allowed to use
 redis_cache_memory: 256m
+
+# the name of the s3 bucket where (encrypted) backups are stored. depending on your s3 provider, you might need to manually create this bucket
+restic_s3_bucket: live-tootnet-nl-backup

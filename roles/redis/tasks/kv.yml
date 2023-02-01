@@ -6,3 +6,10 @@
     port: "{{ redis_kv_port }}"
     memory: "{{ redis_kv_memory }}"
     persistence: true
+
+- name: Create cron for redis kv backup via restic
+  ansible.builtin.cron:
+    name: redis_backup_restic
+    user: root
+    minute: "45"
+    job: "ionice -c2 nice -n19 restic -r s3:https://{{ restic_s3_hostname }}/{{ restic_s3_bucket }} backup /var/lib/redis"
