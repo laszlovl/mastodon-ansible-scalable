@@ -34,6 +34,8 @@
       - imagemagick
       - ffmpeg
       - file
+      # ansible helpers
+      - python3-psycopg2
     state: present
 
 - name: Install bundler

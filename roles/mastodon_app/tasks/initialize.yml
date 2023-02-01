@@ -1,0 +1,21 @@
+- name: Check if mastodon database exists
+  ignore_errors: true
+  changed_when: false
+  no_log: true
+  postgresql_ping:
+    db: mastodon
+    login_host: "{{ groups['postgresql'][0] }}"
+    login_user: mastodon
+    login_password: "{{ postgres_password }}"
+  register: mastodon_database
+
+- name: Create mastodon database, bypassing pgbouncer
+  ansible.builtin.command: bundle exec rake db:setup
+  args:
+    chdir: /home/mastodon/live
+  become_user: mastodon
+  environment:
+    RAILS_ENV: production
+    DB_HOST: "{{ groups['postgresql'][0] }}"
+    DB_PORT: "5432"
+  when: not mastodon_database.is_available

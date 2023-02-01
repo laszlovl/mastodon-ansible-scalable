@@ -35,8 +35,6 @@ set the reverse DNS for server1 to `mastodon.eu` and create an SPF record  like 
 
 # Initialize
 
-To create the initial database: `ansible-playbook -i inventory/mastodon_eu.yaml initialize.yaml`
-
 To create an admin user: `RAILS_ENV=production bin/tootctl accounts create mastodon_eu --email admin@mastodon.eu --confirmed --role Owner`
 
 # TODO

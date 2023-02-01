@@ -1,10 +1,7 @@
 ---
 - name: Install postgresql
   ansible.builtin.apt:
-    name:
-      - postgresql
-      - libpq-dev
-      - python3-psycopg2
+    name: postgresql
     state: present
 
 - name: Configure postgresql
