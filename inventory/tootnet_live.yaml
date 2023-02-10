@@ -6,6 +6,8 @@ tootnet_live:
       ansible_host: 2a05:1500:702:5:1c00:bff:fe00:26fc
     tnlive2:
       ansible_host: 2a05:1500:702:5:1c00:1eff:fe00:26fd
+    tnlivemon:
+      ansible_host: 2a05:1500:702:5:1c00:acff:fe00:26e5
   # define which roles should run on which hosts(s) here
   children:
     # mailserver: only has to be ran on a single host; won't use much resources
@@ -14,6 +16,10 @@ tootnet_live:
     # crons: must only run on a single host; won't use much resources
     mastodon_cron:
       hosts: tnlive1
+    # nginx: only has to be ran on a single host; won't use much resources
+    mastodon_nginx:
+      hosts:
+        tnlive1:
     # default sidekiq processes: can be ran on multiple hosts; will use a lot of CPU and RAM
     mastodon_sidekiq_auto:
       hosts:
@@ -29,10 +35,9 @@ tootnet_live:
     mastodon_web:
       hosts:
         tnlive2:
-    # nginx: only has to be ran on a single host; won't use much resources
-    nginx:
-      hosts:
-        tnlive1:
+    # monitoring server (optional): must only run on a single host, ideally in a different DC/AZ than the other servers
+    monitoring_server:
+      hosts: tnlivemon
     # postgresql: must only run on a single host; will use a lot of CPU and RAM
     postgresql:
       hosts: tnlive1

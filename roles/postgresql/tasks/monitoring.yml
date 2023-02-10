@@ -1,0 +1,15 @@
+- name: Create postgres prometheus role
+  community.postgresql.postgresql_user:
+    name: prometheus
+  become_user: postgres
+
+- name: Install prometheus-postgres-exporter
+  ansible.builtin.apt:
+    name: prometheus-postgres-exporter
+    state: present
+
+- name: Create prometheus-postgres-exporter defaults
+  ansible.builtin.template:
+    src: monitoring/default_prometheus-postgres-exporter.j2
+    dest: /etc/default/prometheus-postgres-exporter
+  notify: Restart prometheus-postgres-exporter

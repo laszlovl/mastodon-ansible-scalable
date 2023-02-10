@@ -1,0 +1,57 @@
+- name: Install prometheus
+  ansible.builtin.apt:
+    name: prometheus
+    state: present
+
+- name: Create prometheus targets
+  ansible.builtin.template:
+    src: targets.json.j2
+    dest: /etc/prometheus/targets.json
+
+- name: Create prometheus defaults
+  ansible.builtin.template:
+    src: default_prometheus.j2
+    dest: /etc/default/prometheus
+  notify: Restart prometheus
+
+- name: Create prometheus config
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+  notify: Restart prometheus
+
+- name: Add grafana APT key
+  ansible.builtin.apt_key:
+    id: 0E22EB88E39E12277A7760AE9E439B102CF3C0C6
+    url: https://packages.grafana.com/gpg.key
+    state: present
+
+- name: Add grafana repository
+  ansible.builtin.apt_repository:
+    repo: deb https://packages.grafana.com/oss/deb stable main
+    state: present
+
+- name: Install grafana
+  ansible.builtin.apt:
+    name: grafana
+    state: present
+
+- name: Enable grafana service
+  ansible.builtin.service:
+    name: grafana-server
+    enabled: true
+    state: started
+
+- name: Request a certificate for the monitoring vhost
+  ansible.builtin.include_role:
+    name: nginx
+    tasks_from: letsencrypt
+  vars:
+    domains:
+      - monitoring.{{ mastodon_app_domain }}
+
+- name: Add the monitoring site to nginx
+  ansible.builtin.template:
+    src: site-monitoring.j2
+    dest: /etc/nginx/sites-enabled/monitoring
+  notify: Restart nginx

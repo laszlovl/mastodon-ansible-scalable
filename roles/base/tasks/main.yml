@@ -4,6 +4,10 @@
 - ansible.builtin.import_tasks: crap.yml
 - ansible.builtin.import_tasks: upgrades.yml
 
+- ansible.builtin.include_tasks:
+    file: monitoring.yml
+  when: "'monitoring_server' in groups"
+
 # Temp/todo: pcextreme servers are configured to use dnssec, but it's broken..
 - name: Disable dnssec
   ansible.builtin.file:

@@ -65,3 +65,7 @@
         name: mastodon_app
         tasks_from: initialize.yml
       when: "'mastodon_cron' in group_names"
+
+    - ansible.builtin.include_role:
+        name: monitoring_server
+      when: "'monitoring_server' in group_names"

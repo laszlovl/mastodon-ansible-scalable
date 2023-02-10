@@ -1,0 +1,44 @@
+# Inspired by https://ipng.ch/s/articles/2022/11/27/mastodon-3.html - thanks!
+
+- name: Download statsd_exporter
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/statsd_exporter/releases/download/v0.23.0/statsd_exporter-0.23.0.linux-amd64.tar.gz
+    checksum: sha256:1558c99d019ba9a9d6635068da5e7e8f04543544fb33c019fc869d0499ec7441
+    dest: /usr/local/bin/
+
+- name: Unarchive statsd_exporter
+  ansible.builtin.unarchive:
+    src: /usr/local/bin/statsd_exporter-0.23.0.linux-amd64.tar.gz
+    remote_src: true
+    dest: /usr/local/bin/
+    creates: /usr/local/bin/statsd_exporter-0.23.0.linux-amd64/
+
+- name: Create prometheus-statsd-exporter defaults
+  ansible.builtin.template:
+    src: monitoring/default_prometheus-statsd-exporter.j2
+    dest: /etc/default/prometheus-statsd-exporter
+  notify: Restart prometheus-statsd-exporter
+
+- name: Create prometheus-statsd-exporter defaults
+  ansible.builtin.template:
+    src: monitoring/default_prometheus-statsd-exporter.j2
+    dest: /etc/default/prometheus-statsd-exporter
+  notify: Restart prometheus-statsd-exporter
+
+- name: Create prometheus-statsd-exporter mapping config
+  ansible.builtin.copy:
+    src: monitoring/statsd-mapping.yaml
+    dest: /usr/local/etc/statsd-mapping.yaml
+
+- name: Create prometheus-statsd-exporter service
+  ansible.builtin.copy:
+    src: monitoring/prometheus-statsd-exporter.service
+    dest: /lib/systemd/system/prometheus-statsd-exporter.service
+  notify:
+    - Reload systemd
+
+- name: Enable prometheus-statsd-exporter service
+  ansible.builtin.service:
+    name: prometheus-statsd-exporter
+    enabled: true
+    state: started

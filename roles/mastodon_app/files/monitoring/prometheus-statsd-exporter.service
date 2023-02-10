@@ -1,0 +1,14 @@
+[Unit]
+Description=Prometheus statsd exporter
+
+[Service]
+Restart=on-failure
+User=prometheus
+EnvironmentFile=/etc/default/prometheus-statsd-exporter
+ExecStart=/usr/local/bin/statsd_exporter-0.23.0.linux-amd64/statsd_exporter $ARGS
+ExecReload=/bin/kill -HUP $MAINPID
+TimeoutStopSec=20s
+SendSIGKILL=no
+
+[Install]
+WantedBy=multi-user.target

@@ -1,7 +1,7 @@
 ---
 - ansible.builtin.import_tasks: monitoring.yml
 
-- name: Restart postgresql
+- name: Restart prometheus
   ansible.builtin.service:
-    name: postgresql@14-main
+    name: prometheus
     state: restarted

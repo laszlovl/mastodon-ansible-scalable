@@ -1,0 +1,10 @@
+- name: Install prometheus-node-exporter
+  ansible.builtin.apt:
+    name: prometheus-node-exporter
+    state: present
+
+- name: Create prometheus-node-exporter defaults
+  ansible.builtin.template:
+    src: monitoring/default_prometheus-node-exporter.j2
+    dest: /etc/default/prometheus-node-exporter
+  notify: Restart prometheus-node-exporter

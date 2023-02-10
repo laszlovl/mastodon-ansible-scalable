@@ -1,0 +1,10 @@
+- name: Install prometheus-nginx-exporter
+  ansible.builtin.apt:
+    name: prometheus-nginx-exporter
+    state: present
+
+- name: Create prometheus-nginx-exporter defaults
+  ansible.builtin.template:
+    src: monitoring/default_prometheus-nginx-exporter.j2
+    dest: /etc/default/prometheus-nginx-exporter
+  notify: Restart prometheus-nginx-exporter

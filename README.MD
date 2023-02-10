@@ -1,3 +1,7 @@
+# Mastodon-ansible-scalable
+
+This Ansible playbook allows you to set up a scalable Mastodon environment running on a set of Ubuntu 22 servers within minutes.
+
 # Create your environment configuration
 
 This repository currently contains both the generic ansible configuration as the specific configuration for my PoC environment https://tootnet.nl.
@@ -33,6 +37,18 @@ Given a `mastodon_app_domain` of "mastodon.eu", point A/AAAA records to the ngin
 For mail delivery, given the `mail` role running on a server with hostname "server1" and DNS record "server1.mastodon.eu",
 set the reverse DNS for server1 to `mastodon.eu` and create an SPF record  like `v=spf1 a:server1.mastodon.eu ~all`.
 
+For monitoring, create an A/AAAA/CNAME record for `monitoring.mastodon.eu` pointing to the server where the `monitoring` role is ran.
+
+# Monitoring
+
+To setup Grafana, go to https://monitoring.mastodon.eu and log in with the default of admin/admin. Head to https://monitoring.mastodon.eu/datasources
+and add a "Prometheus" datasource with all of the default settings. Finally head to https://monitoring.mastodon.eu/dashboard/import and import the following dashboards:
+
+* https://grafana.com/grafana/dashboards/1860-node-exporter-full/
+* https://grafana.com/grafana/dashboards/9628-postgresql-database/
+* https://grafana.com/grafana/dashboards/17492-mastodon-stats/
+* https://github.com/nginxinc/nginx-prometheus-exporter/blob/main/grafana/dashboard.json
+
 # Initialize
 
 To create an admin user: `RAILS_ENV=production bin/tootctl accounts create mastodon_eu --email admin@mastodon.eu --confirmed --role Owner`
@@ -40,5 +56,5 @@ To create an admin user: `RAILS_ENV=production bin/tootctl accounts create masto
 # TODO
 
 * build mastodon as deb
-* monitoring
-* dkim
+* properly package wesher and statsd_exporter as deb
+* dkim support in exim

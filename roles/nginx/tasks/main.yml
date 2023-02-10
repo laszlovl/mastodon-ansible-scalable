@@ -73,4 +73,6 @@
 - name: Flush handlers so nginx can process letsencrypt validation requests
   ansible.builtin.meta: flush_handlers
 
-- ansible.builtin.import_tasks: mastodon.yml
+- ansible.builtin.include_tasks:
+    file: monitoring.yml
+  when: "'monitoring_server' in groups"

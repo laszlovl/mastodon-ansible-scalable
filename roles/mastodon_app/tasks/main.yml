@@ -112,3 +112,7 @@
 
 - ansible.builtin.import_tasks: mount.yml
   when: mastodon_app_mount_src is defined
+
+- ansible.builtin.include_tasks:
+    file: monitoring.yml
+  when: "'monitoring_server' in groups"

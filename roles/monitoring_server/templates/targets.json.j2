@@ -1,0 +1,42 @@
+[
+  {
+    "labels": {
+      "job": "node"
+    },
+    "targets": [
+        {% for host in groups['all'] %}
+            "{{ host }}:9100" {% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+  },
+  {
+    "labels": {
+      "job": "postgres"
+    },
+    "targets": [
+        {% for host in groups['postgresql'] %}
+            "{{ host }}:9187" {% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+  },
+  {
+    "labels": {
+      "job": "mastodon"
+    },
+    "targets": [
+        {% for host in groups['all'] %}
+            "{{ host }}:9102" {% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+  },
+    {
+      "labels": {
+        "job": "nginx"
+      },
+      "targets": [
+          {% for host in groups['mastodon_nginx'] %}
+              "{{ host }}:9113" {% if not loop.last %},{% endif %}
+          {% endfor %}
+      ]
+    }
+]

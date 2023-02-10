@@ -1,3 +1,7 @@
 ---
 - ansible.builtin.import_tasks: server.yml
 - ansible.builtin.import_tasks: backup.yml
+
+- ansible.builtin.include_tasks:
+    file: monitoring.yml
+  when: "'monitoring_server' in groups"

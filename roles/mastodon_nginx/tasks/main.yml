@@ -1,6 +1,7 @@
 ---
-- ansible.builtin.include_tasks:
-    file: letsencrypt.yml
+- ansible.builtin.include_role:
+    name: nginx
+    tasks_from: letsencrypt
   vars:
     domains:
       - "{{ mastodon_app_domain }}"

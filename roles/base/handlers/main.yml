@@ -1,3 +1,4 @@
 ---
 - ansible.builtin.import_tasks: ssh.yml
 - ansible.builtin.import_tasks: crap.yml
+- ansible.builtin.import_tasks: monitoring.yml
