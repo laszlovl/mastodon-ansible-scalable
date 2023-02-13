@@ -1,6 +1,18 @@
 # Mastodon-ansible-scalable
 
-This Ansible playbook allows you to set up a scalable Mastodon environment running on a set of Ubuntu 22 servers within minutes.
+This Ansible playbook allows you to easily set up a scalable Mastodon environment running on a set of Ubuntu 22 servers.
+
+It deploys and configures:
+* Basic system configuration and hardening
+* A firewall, using nftables
+* Private networking between the servers, using wesher (wireguard)
+* Postgresql
+* Redis
+* Automated backups of postgresql and redis to s3, using restic
+* Mail delivery, using exim4
+* Nginx
+* The core mastodon components (puma, api, sidekiq, cron)
+* Monitoring, using grafana
 
 # Create your environment configuration
 
@@ -37,7 +49,7 @@ Given a `mastodon_app_domain` of "mastodon.eu", point A/AAAA records to the ngin
 For mail delivery, given the `mail` role running on a server with hostname "server1" and DNS record "server1.mastodon.eu",
 set the reverse DNS for server1 to `mastodon.eu` and create an SPF record  like `v=spf1 a:server1.mastodon.eu ~all`.
 
-For monitoring, create an A/AAAA/CNAME record for `monitoring.mastodon.eu` pointing to the server where the `monitoring` role is ran.
+For monitoring, create an A/AAAA (or CNAME) record for `monitoring.mastodon.eu` pointing to the server where the `monitoring` role is ran.
 
 # Monitoring
 
