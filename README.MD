@@ -58,3 +58,7 @@ To create an admin user: `RAILS_ENV=production bin/tootctl accounts create masto
 * build mastodon as deb
 * properly package wesher and statsd_exporter as deb
 * dkim support in exim
+
+# Contact
+
+Questions? Reach me at @las@mastodon.nl
