@@ -6,13 +6,13 @@ It deploys and configures:
 * Basic system configuration and hardening
 * A firewall, using nftables
 * Private networking between the servers, using wesher (wireguard)
-* Postgresql
+* Postgresql and pgbouncer
 * Redis
 * Automated backups of postgresql and redis to s3, using restic
+* Nginx with HTTPS, using letsencrypt
+* The core mastodon components (puma, streaming, sidekiq, cron)
 * Mail delivery, using exim4
-* Nginx
-* The core mastodon components (puma, api, sidekiq, cron)
-* Monitoring, using grafana
+* Monitoring, using prometheus and grafana
 
 # Create your environment configuration
 

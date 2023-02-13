@@ -18,7 +18,7 @@
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: ^PermitRootLogin
-    line: PermitRootLogin yes
+    line: PermitRootLogin no
   notify: Restart sshd
 
 - name: Set SSH PasswordAuthentication
