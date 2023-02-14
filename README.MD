@@ -13,6 +13,7 @@ It deploys and configures:
 * The core mastodon components (puma, streaming, sidekiq, cron)
 * Mail delivery, using exim4
 * Monitoring, using prometheus and grafana
+* Centralized logging, using loki and grafana
 
 # Create your environment configuration
 
@@ -54,7 +55,7 @@ For monitoring, create an A/AAAA (or CNAME) record for `monitoring.mastodon.eu` 
 # Monitoring
 
 To setup Grafana, go to https://monitoring.mastodon.eu and log in with the default of admin/admin. Head to https://monitoring.mastodon.eu/datasources
-and add a "Prometheus" datasource with all of the default settings. Finally head to https://monitoring.mastodon.eu/dashboard/import and import the following dashboards:
+and add a "Prometheus" and "Loki" datasource with all of the default settings. Finally head to https://monitoring.mastodon.eu/dashboard/import and import the following dashboards:
 
 * https://grafana.com/grafana/dashboards/1860-node-exporter-full/
 * https://grafana.com/grafana/dashboards/9628-postgresql-database/

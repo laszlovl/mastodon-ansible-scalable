@@ -24,4 +24,4 @@ ansible_user: "{{ base_account_username }}"
 ansible_port: "{{ base_ssh_port }}"
 
 # TODO.... bootstrap of wesher on the first node
-wireguard_ip: "{{ ansible_wgoverlay.ipv4.address | default('127.0.2.1') }}"
+wireguard_ip: "{{ ansible_wgoverlay.ipv4.address | default('0.0.0.0') }}"

@@ -3,3 +3,8 @@
   ansible.builtin.service:
     name: prometheus-nginx-exporter
     state: restarted
+
+- name: Restart prometheus-statsd-exporter
+  ansible.builtin.service:
+    name: prometheus-statsd-exporter
+    state: restarted

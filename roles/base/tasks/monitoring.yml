@@ -8,3 +8,9 @@
     src: monitoring/default_prometheus-node-exporter.j2
     dest: /etc/default/prometheus-node-exporter
   notify: Restart prometheus-node-exporter
+
+- name: Create rsyslogd loki config
+  ansible.builtin.template:
+    src: monitoring/loki.conf.j2
+    dest: /etc/rsyslog.d/40-loki.conf
+  notify: Restart syslog

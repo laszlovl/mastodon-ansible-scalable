@@ -42,6 +42,19 @@
     enabled: true
     state: started
 
+- name: Install loki and promtail
+  ansible.builtin.apt:
+    name:
+      - loki
+      - promtail
+    state: present
+
+- name: Create promtail config
+  ansible.builtin.template:
+    src: promtail.yml.j2
+    dest: /etc/promtail/config.yml
+  notify: Restart promtail
+
 - name: Request a certificate for the monitoring vhost
   ansible.builtin.include_role:
     name: nginx

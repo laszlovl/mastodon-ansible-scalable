@@ -1,0 +1,13 @@
+*.* action(type="omfwd"
+    protocol="tcp"
+    target="{{ groups['monitoring_server'][0] }}"
+    port="1514"
+    Template="RSYSLOG_SyslogProtocol23Format"
+    TCP_Framing="octet-counted"
+    KeepAlive="on"
+
+    action.resumeinterval="10"
+    action.resumeRetryCount="1"
+    action.reportSuspension="on"
+    action.reportSuspensionContinuation="on"
+)

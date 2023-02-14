@@ -1,7 +1,10 @@
 ---
-- ansible.builtin.import_tasks: monitoring.yml
-
 - name: Restart prometheus
   ansible.builtin.service:
     name: prometheus
+    state: restarted
+
+- name: Restart promtail
+  ansible.builtin.service:
+    name: promtail
     state: restarted

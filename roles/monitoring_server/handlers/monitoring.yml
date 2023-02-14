@@ -1,5 +1,0 @@
----
-- name: Restart prometheus-statsd-exporter
-  ansible.builtin.service:
-    name: prometheus-statsd-exporter
-    state: restarted
