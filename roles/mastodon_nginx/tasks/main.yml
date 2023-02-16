@@ -1,5 +1,6 @@
 ---
-- ansible.builtin.include_role:
+- name: Request SSL certificates
+  ansible.builtin.include_role:
     name: nginx
     tasks_from: letsencrypt
   vars:
@@ -8,7 +9,8 @@
       - files.{{ mastodon_app_domain }}
       - assets.{{ mastodon_app_domain }}
 
-- ansible.builtin.template:
+- name: Add mastodon site to nginx
+  ansible.builtin.template:
     src: site-mastodon.j2
     dest: /etc/nginx/sites-enabled/mastodon
   notify: Restart nginx

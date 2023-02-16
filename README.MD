@@ -1,6 +1,6 @@
 # Mastodon-ansible-scalable
 
-This Ansible playbook allows you to easily set up a scalable Mastodon environment running on a set of Ubuntu 22 servers.
+This Ansible playbook allows you to easily set up a scalable Mastodon environment running on a set of Ubuntu 22 servers, with only a s3-compatible object storage as external dependency.
 
 It deploys and configures:
 * Basic system configuration and hardening

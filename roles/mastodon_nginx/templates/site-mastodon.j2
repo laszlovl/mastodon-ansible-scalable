@@ -112,6 +112,9 @@ server {
   
   try_files $uri =404;
   
+  log_not_found off;
+  access_log off;
+
   open_file_cache max=100;
 }
 
@@ -128,6 +131,9 @@ server {
   add_header Strict-Transport-Security "max-age=63072000; includeSubDomains";
   expires 1y;
   
+  log_not_found off;
+  access_log off;
+
   {% if mastodon_app_s3_hostname is defined %}
   try_files $uri @s3;
   

@@ -7,7 +7,7 @@ tootnet_live:
     tnlive2:
       ansible_host: 2a05:1500:702:5:1c00:1eff:fe00:26fd
     tnlivemon:
-      ansible_host: 2a05:1500:702:5:1c00:acff:fe00:26e5
+      ansible_host: 2a05:1500:600:1:1c00:74ff:fe00:390
   # define which roles should run on which hosts(s) here
   children:
     # mailserver: only has to be ran on a single host; won't use much resources

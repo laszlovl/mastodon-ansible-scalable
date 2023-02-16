@@ -20,8 +20,8 @@
       when: "'mail' in group_names"
 
     - ansible.builtin.include_role:
-        name: nginx
-      when: "'nginx' in group_names"
+        name: mastodon_nginx
+      when: "'mastodon_nginx' in group_names"
 
     - ansible.builtin.include_role:
         name: postgresql
