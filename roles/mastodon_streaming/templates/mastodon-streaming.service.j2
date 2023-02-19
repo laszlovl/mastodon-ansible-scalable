@@ -6,7 +6,7 @@ After=network.target
 SyslogIdentifier=mastodon-streaming
 Type=simple
 User=mastodon
-WorkingDirectory=/home/mastodon/live
+WorkingDirectory=/opt/mastodon
 EnvironmentFile=/etc/mastodon/env
 Environment="NODE_ENV=production"
 Environment="BIND={{ wireguard_ip }}"
@@ -48,7 +48,7 @@ SystemCallArchitectures=native
 SystemCallFilter=~@cpu-emulation @debug @keyring @ipc @memlock @mount @obsolete @privileged @resources @setuid
 SystemCallFilter=pipe
 SystemCallFilter=pipe2
-ReadWritePaths=/home/mastodon/live
+ReadWritePaths=/opt/mastodon
 
 [Install]
 WantedBy=multi-user.target

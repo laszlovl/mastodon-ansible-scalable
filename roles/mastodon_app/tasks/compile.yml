@@ -1,0 +1,95 @@
+---
+# This task will compile Mastodon from source on each machine. No longer supported.
+- name: Install mastodon dev dependencies
+  ansible.builtin.apt:
+    name:
+      # generic build tools
+      - ruby
+      - ruby-dev
+      - gcc
+      - build-essential
+      - g++
+      - protobuf-compiler
+      - autoconf
+      - bison
+      # unused (?) gem dependencies
+      - libxml2-dev
+      - libxslt1-dev
+      - libgdbm-dev
+      - libreadline-dev
+      - libprotobuf-dev
+      - libssl-dev
+      - libyaml-dev
+      - libffi-dev
+      # gem dependencies
+      - libicu-dev
+      - libjemalloc-dev
+      - zlib1g-dev
+      - libidn11-dev
+      - libpq-dev
+      # tools
+      - imagemagick
+      - ffmpeg
+      - file
+    state: present
+
+- name: Install bundler
+  ansible.builtin.command: gem install bundler
+  args:
+    creates: /usr/local/bin/bundle
+
+- name: Create /opt directory
+  ansible.builtin.file:
+    path: /opt
+    state: directory
+
+- name: Download mastodon
+  ansible.builtin.unarchive:
+    src: https://github.com/mastodon/mastodon/archive/refs/tags/v{{ mastodon_app_version }}.tar.gz
+    remote_src: true
+    dest: /home/mastodon
+    creates: /home/mastodon/mastodon-{{ mastodon_app_version }}
+  become_user: mastodon
+
+- name: Symlink mastodon live
+  ansible.builtin.file:
+    src: /home/mastodon/mastodon-{{ mastodon_app_version }}
+    dest: /opt/mastodon
+    state: link
+    owner: mastodon
+
+- name: Configure bundler
+  ansible.builtin.file:
+    path: /home/mastodon/mastodon-{{ mastodon_app_version }}/.bundle
+    state: directory
+    owner: mastodon
+    group: mastodon
+
+- name: Configure bundler
+  ansible.builtin.copy:
+    src: bundle_config
+    dest: /home/mastodon/mastodon-{{ mastodon_app_version }}/.bundle/config
+
+- name: Run bundler
+  ansible.builtin.command: bundle install
+  args:
+    chdir: /home/mastodon/mastodon-{{ mastodon_app_version }}
+    creates: /home/mastodon/mastodon-{{ mastodon_app_version }}/vendor/bundle
+  become_user: mastodon
+
+- name: Run yarn
+  ansible.builtin.command: yarn install --pure-lockfile
+  args:
+    chdir: /home/mastodon/mastodon-{{ mastodon_app_version }}
+    creates: /home/mastodon/mastodon-{{ mastodon_app_version }}/node_modules
+  become_user: mastodon
+
+- name: Run asset precompile
+  ansible.builtin.command: bundle exec rails assets:precompile
+  args:
+    chdir: /home/mastodon/mastodon-{{ mastodon_app_version }}
+    creates: /home/mastodon/mastodon-{{ mastodon_app_version }}/public/assets
+  become_user: mastodon
+  environment:
+    RAILS_ENV: production
+    NODE_OPTIONS: --openssl-legacy-provider

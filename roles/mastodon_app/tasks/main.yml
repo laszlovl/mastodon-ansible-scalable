@@ -1,77 +1,26 @@
 ---
-- ansible.builtin.import_tasks: user.yml
-- ansible.builtin.import_tasks: nodejs.yml
-- ansible.builtin.import_tasks: pgbouncer.yml
-
-- name: Install mastodon dependencies
-  ansible.builtin.apt:
-    name:
-      # generic build tools
-      - ruby
-      - ruby-dev
-      - gcc
-      - build-essential
-      - g++
-      - protobuf-compiler
-      - autoconf
-      - bison
-      # unused (?) gem dependencies
-      - libxml2-dev
-      - libxslt1-dev
-      - libgdbm-dev
-      - libreadline-dev
-      - libprotobuf-dev
-      - libssl-dev
-      - libyaml-dev
-      - libffi-dev
-      # gem dependencies
-      - libicu-dev
-      - libjemalloc-dev
-      - zlib1g-dev
-      - libidn11-dev
-      - libpq-dev
-      # tools
-      - imagemagick
-      - ffmpeg
-      - file
-      # ansible helpers
-      - python3-psycopg2
-    state: present
-
-- name: Install bundler
-  ansible.builtin.command: gem install bundler
-  args:
-    creates: /usr/local/bin/bundle
-
-- name: Download mastodon
-  ansible.builtin.unarchive:
-    src: https://github.com/mastodon/mastodon/archive/refs/tags/v{{ mastodon_app_version }}.tar.gz
-    remote_src: true
-    dest: /home/mastodon
-    creates: /home/mastodon/mastodon-{{ mastodon_app_version }}
-  become_user: mastodon
-
-- name: Symlink mastodon live
+- name: Create config directory
   ansible.builtin.file:
-    src: /home/mastodon/mastodon-{{ mastodon_app_version }}
-    dest: /home/mastodon/live
-    state: link
-    owner: mastodon
-
-- name: Create config directories
-  ansible.builtin.file:
-    path: "{{ item }}"
+    path: /etc/mastodon
     state: directory
     owner: mastodon
     group: mastodon
-  loop:
-    - /etc/mastodon
-    - /home/mastodon/live/.bundle
 
-- name: Configure bundler
-  ansible.builtin.copy:
-    src: bundle_config
-    dest: /home/mastodon/live/.bundle/config
+- ansible.builtin.import_tasks: user.yml
+- ansible.builtin.import_tasks: nodejs.yml
+- ansible.builtin.import_tasks: pgbouncer.yml
+- ansible.builtin.import_tasks: compile.yml
+
+- ansible.builtin.include_tasks: monitoring.yml
+  when: "'monitoring_server' in groups"
+
+- ansible.builtin.include_tasks: mount.yml
+  when: mastodon_app_mount_src is defined
+
+- name: Install ansible dependencies
+  ansible.builtin.apt:
+    name: python3-psycopg2
+    state: present
 
 - name: Create mastodon envfile
   ansible.builtin.template:
@@ -82,37 +31,6 @@
 - name: Symlink mastodon envfile
   ansible.builtin.file:
     src: /etc/mastodon/env
-    dest: /home/mastodon/live/.env
+    dest: /opt/mastodon/.env
     state: link
     owner: mastodon
-
-- name: Run bundler
-  ansible.builtin.command: bundle install
-  args:
-    chdir: /home/mastodon/live
-    creates: /home/mastodon/live/vendor/bundle
-  become_user: mastodon
-
-- name: Run yarn
-  ansible.builtin.command: yarn install --pure-lockfile
-  args:
-    chdir: /home/mastodon/live
-    creates: /home/mastodon/live/node_modules
-  become_user: mastodon
-
-- name: Run asset precompile
-  ansible.builtin.command: bundle exec rails assets:precompile
-  args:
-    chdir: /home/mastodon/live
-    creates: /home/mastodon/live/public/assets
-  become_user: mastodon
-  environment:
-    RAILS_ENV: production
-    NODE_OPTIONS: --openssl-legacy-provider
-
-- ansible.builtin.import_tasks: mount.yml
-  when: mastodon_app_mount_src is defined
-
-- ansible.builtin.include_tasks:
-    file: monitoring.yml
-  when: "'monitoring_server' in groups"

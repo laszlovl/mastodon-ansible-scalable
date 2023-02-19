@@ -6,7 +6,7 @@
     hour: "5"
     minute: "30"
     weekday: "1"
-    job: RAILS_ENV=production /home/mastodon/live/bin/tootctl media remove
+    job: RAILS_ENV=production /opt/mastodon/bin/tootctl media remove
 
 - name: Mastodon preview_cards_remove cron
   ansible.builtin.cron:
@@ -15,4 +15,4 @@
     hour: "5"
     minute: "35"
     weekday: "1"
-    job: RAILS_ENV=production /home/mastodon/live/bin/tootctl preview_cards remove
+    job: RAILS_ENV=production /opt/mastodon/bin/tootctl preview_cards remove

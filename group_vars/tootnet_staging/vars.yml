@@ -10,3 +10,5 @@ mastodon_app_s3_signature_version: s3
 
 redis_kv_memory: 512m
 redis_cache_memory: 256m
+
+restic_s3_bucket: staging-tootnet-nl-backup

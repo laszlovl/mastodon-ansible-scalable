@@ -25,7 +25,7 @@ server {
   
   include letsencrypt.conf;
   
-  root /home/mastodon/live/public;
+  root /opt/mastodon/public;
   
   location / {
     return 301 https://$host$request_uri;
@@ -45,7 +45,7 @@ server {
   sendfile             on;
   client_max_body_size 80m;
 
-  root /home/mastodon/live/public;
+  root /opt/mastodon/public;
 
   location / {
     try_files $uri @proxy;
@@ -104,7 +104,7 @@ server {
   ssl_certificate /etc/letsencrypt/live/{{ mastodon_app_domain }}/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/{{ mastodon_app_domain }}/privkey.pem;
 
-  root /home/mastodon/live/public;
+  root /opt/mastodon/public;
   
   add_header Access-Control-Allow-Origin *;
   add_header Cache-Control "public, max-age=604800, must-revalidate";

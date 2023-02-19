@@ -6,7 +6,7 @@ After=network.target
 SyslogIdentifier=sidekiq-{{ instance_name }}
 Type=simple
 User=mastodon
-WorkingDirectory=/home/mastodon/live
+WorkingDirectory=/opt/mastodon
 EnvironmentFile=/etc/mastodon/env
 Environment="RAILS_ENV=production"
 Environment="DB_POOL={{ concurrency }}"
@@ -49,7 +49,7 @@ SystemCallFilter=~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileg
 SystemCallFilter=@chown
 SystemCallFilter=pipe
 SystemCallFilter=pipe2
-ReadWritePaths=/home/mastodon/live {% if mastodon_app_mount_src is defined %} /mnt/files {% endif %}
+ReadWritePaths=/opt/mastodon {% if mastodon_app_mount_src is defined %} /mnt/files {% endif %}
 
 [Install]
 WantedBy=multi-user.target
