@@ -9,13 +9,22 @@
 - ansible.builtin.import_tasks: user.yml
 - ansible.builtin.import_tasks: nodejs.yml
 - ansible.builtin.import_tasks: pgbouncer.yml
-- ansible.builtin.import_tasks: compile.yml
 
 - ansible.builtin.include_tasks: monitoring.yml
   when: "'monitoring_server' in groups"
 
 - ansible.builtin.include_tasks: mount.yml
   when: mastodon_app_mount_src is defined
+
+- name: Download mastodon-core deb
+  ansible.builtin.get_url:
+    url: https://github.com/laszlovl/mastodon-build/releases/download/v{{ mastodon_app_version }}/mastodon-core_{{ mastodon_app_version }}_amd64.deb
+    checksum: sha256:4f76a3eee76e3cf5d3208a33f2b1196fbe25ce4745fa77b877dd8f68333a4781
+    dest: /var/tmp/
+
+- name: Install mastodon core
+  ansible.builtin.apt:
+    deb: /var/tmp/mastodon-core_{{ mastodon_app_version }}_amd64.deb
 
 - name: Install ansible dependencies
   ansible.builtin.apt:
