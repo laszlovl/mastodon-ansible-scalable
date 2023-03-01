@@ -16,4 +16,4 @@
 - name: Notify mastodon-sidekiq {{ instance_name }}
   ansible.builtin.command: /bin/true
   notify: Restart mastodon-sidekiq-{{ instance_name }}
-  changed_when: mastodon_app_envfile_result.changed
+  changed_when: mastodon_app_envfile_result.changed or mastodon_app_deb_result.changed

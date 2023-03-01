@@ -19,12 +19,13 @@
 - name: Download mastodon-core deb
   ansible.builtin.get_url:
     url: https://github.com/laszlovl/mastodon-build/releases/download/v{{ mastodon_app_version }}/mastodon-core_{{ mastodon_app_version }}_amd64.deb
-    checksum: sha256:4f76a3eee76e3cf5d3208a33f2b1196fbe25ce4745fa77b877dd8f68333a4781
+    checksum: sha256:{{ mastodon_app_deb_hash }}
     dest: /var/tmp/
 
 - name: Install mastodon core
   ansible.builtin.apt:
     deb: /var/tmp/mastodon-core_{{ mastodon_app_version }}_amd64.deb
+  register: mastodon_app_deb_result
 
 - name: Install ansible dependencies
   ansible.builtin.apt:

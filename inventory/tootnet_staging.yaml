@@ -10,6 +10,9 @@ tootnet_staging:
       hosts: tnstaging1
     mastodon_cron:
       hosts: tnstaging1
+    mastodon_nginx:
+      hosts:
+        tnstaging1:
     mastodon_sidekiq_auto:
       hosts:
         tnstaging1:
@@ -24,9 +27,6 @@ tootnet_staging:
       hosts:
         tnstaging1:
         tnstaging2:
-    nginx:
-      hosts:
-        tnstaging1:
     postgresql:
       hosts: tnstaging1
     redis:

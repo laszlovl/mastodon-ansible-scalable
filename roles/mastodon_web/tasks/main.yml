@@ -17,4 +17,4 @@
 - name: Notify mastodon-web handler via mastodon-app
   ansible.builtin.command: /bin/true
   notify: Restart mastodon-web
-  changed_when: mastodon_app_envfile_result.changed
+  changed_when: mastodon_app_envfile_result.changed or mastodon_app_deb_result.changed
