@@ -1,4 +1,6 @@
 ---
+- ansible.builtin.import_tasks: user.yml
+
 - name: Create config directory
   ansible.builtin.file:
     path: /etc/mastodon
@@ -6,7 +8,6 @@
     owner: mastodon
     group: mastodon
 
-- ansible.builtin.import_tasks: user.yml
 - ansible.builtin.import_tasks: nodejs.yml
 - ansible.builtin.import_tasks: pgbouncer.yml
 
@@ -26,6 +27,11 @@
   ansible.builtin.apt:
     deb: /var/tmp/mastodon-core_{{ mastodon_app_version }}_amd64.deb
   register: mastodon_app_deb_result
+
+- name: Install bundler
+  ansible.builtin.command: gem install bundler
+  args:
+    creates: /usr/local/bin/bundle
 
 - name: Install ansible dependencies
   ansible.builtin.apt:
