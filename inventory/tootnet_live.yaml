@@ -6,6 +6,8 @@ tootnet_live:
       ansible_host: 2a05:1500:702:5:1c00:bff:fe00:26fc
     tnlive3:
       ansible_host: 2a05:1500:702:1:1c00:2dff:fe00:1f2
+    tnlive4:
+      ansible_host: 2a05:1500:702:1:1c00:15ff:fe00:1f7
     tnlivemon:
       ansible_host: 2a05:1500:600:1:1c00:74ff:fe00:390
   # define which roles should run on which hosts(s) here
@@ -23,7 +25,7 @@ tootnet_live:
     # default sidekiq processes: can be ran on multiple hosts; will use a lot of CPU and RAM
     mastodon_sidekiq_auto:
       hosts:
-        tnlive3:
+        tnlive4:
     # scheduler sidekiq process: must only run on a single host; will use some RAM
     mastodon_sidekiq_scheduler:
       hosts: tnlive1
