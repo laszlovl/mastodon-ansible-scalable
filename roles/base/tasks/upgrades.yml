@@ -4,7 +4,15 @@
     name: unattended-upgrades
     state: present
 
-- name: Enable unattended upgrades
-  ansible.builtin.copy:
-    src: upgrades/unattended-upgrades
-    dest: /etc/apt/apt.conf.d/51periodic-unattended-upgrades
+- name: Enable systemd apt-daily.timer
+  ansible.builtin.systemd:
+    name: apt-daily.timer
+    state: started
+    enabled: true
+
+- name: Enable systemd apt-daily-upgrade.timer
+  ansible.builtin.systemd:
+    name: apt-daily-upgrade.timer
+    state: started
+    enabled: true
+
