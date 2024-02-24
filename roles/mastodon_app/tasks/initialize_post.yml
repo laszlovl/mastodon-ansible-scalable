@@ -1,0 +1,21 @@
+- name: Create mastodon database, bypassing pgbouncer
+  ansible.builtin.command: bundle exec rake db:setup
+  args:
+    chdir: /opt/mastodon
+  become_user: mastodon
+  environment:
+    RAILS_ENV: production
+    DB_HOST: "{{ groups['postgresql'][0] }}"
+    DB_PORT: "5432"
+  when: not mastodon_database.is_available
+
+- name: Run db migrate after version upgrade
+  ansible.builtin.command: bundle exec rails db:migrate
+  args:
+    chdir: /opt/mastodon
+  become_user: mastodon
+  environment:
+    RAILS_ENV: production
+    DB_HOST: "{{ groups['postgresql'][0] }}"
+    DB_PORT: "5432"
+  when: mastodon_app_deb_result.changed

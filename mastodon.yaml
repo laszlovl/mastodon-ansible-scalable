@@ -30,6 +30,11 @@
     - ansible.builtin.include_role:
         name: redis
       when: "'redis' in group_names"
+      
+    - ansible.builtin.include_role:
+        name: mastodon_app
+        tasks_from: initialize_pre.yml
+      when: "'mastodon_cron' in group_names"
 
     - ansible.builtin.include_role:
         name: mastodon_web
@@ -63,7 +68,7 @@
 
     - ansible.builtin.include_role:
         name: mastodon_app
-        tasks_from: initialize.yml
+        tasks_from: initialize_post.yml
       when: "'mastodon_cron' in group_names"
 
     - ansible.builtin.include_role:

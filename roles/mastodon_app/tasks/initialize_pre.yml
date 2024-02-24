@@ -8,19 +8,11 @@
     login_user: mastodon
     login_password: "{{ postgres_password }}"
   register: mastodon_database
+  
+- name: Gather the package facts
+  ansible.builtin.package_facts:
 
-- name: Create mastodon database, bypassing pgbouncer
-  ansible.builtin.command: bundle exec rake db:setup
-  args:
-    chdir: /opt/mastodon
-  become_user: mastodon
-  environment:
-    RAILS_ENV: production
-    DB_HOST: "{{ groups['postgresql'][0] }}"
-    DB_PORT: "5432"
-  when: not mastodon_database.is_available
-
-- name: Run db migrate after version upgrade
+- name: Run db pre-migrate before version upgrade
   ansible.builtin.command: bundle exec rails db:migrate
   args:
     chdir: /opt/mastodon
@@ -29,4 +21,5 @@
     RAILS_ENV: production
     DB_HOST: "{{ groups['postgresql'][0] }}"
     DB_PORT: "5432"
-  when: mastodon_app_deb_result.changed
+    SKIP_POST_DEPLOYMENT_MIGRATIONS: "true"
+  when: "mastodon_database.is_available and 'mastodon-core' in ansible_facts.packages and ansible_facts.packages['mastodon-core'][0].version != mastodon_app_version"
